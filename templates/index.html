@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Approval Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Loan Approval Prediction</h1>
+            <p>Enter your details below to get a loan eligibility prediction.</p>
+        </header>
+
+        <main>
+            <form action="/" method="POST" class="loan-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="e.g., John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="monthly_salary">Monthly Salary (INR)</label>
+                    <input type="number" id="monthly_salary" name="monthly_salary" placeholder="e.g., 30000" required>
+                </div>
+                <div class="form-group">
+                    <label for="loan_amount">Loan Amount (INR)</label>
+                    <input type="number" id="loan_amount" name="loan_amount" placeholder="e.g., 500000" required>
+                </div>
+                <div class="form-group">
+                    <label for="credit_score">Credit Score</label>
+                    <input type="number" id="credit_score" name="credit_score" placeholder="e.g., 780" required min="300" max="900">
+                </div>
+                <button type="submit" class="btn-predict">Predict Approval</button>
+            </form>
+
+            <!-- Result Section -->
+            {% if prediction_result %}
+            <div id="result-section" class="result-section">
+                <h2>Prediction Result for {{ prediction_result.name }}</h2>
+                {% if prediction_result.status == 'Approved' %}
+                    <p class="result-status approved">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <span>Loan Approved</span>
+                    </p>
+                {% else %}
+                    <p class="result-status not-approved">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                        <span>Loan Not Approved</span>
+                    </p>
+                {% endif %}
+                <p class="result-reason"><strong>Reason:</strong> {{ prediction_result.reason }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Error Message Display -->
+            {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
